@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="gbk" />
+    <title>易迅中秋小游戏</title>
+		<style type="text/css" media="screen">
+		body { margin:0; padding:0; overflow: hidden; }
+		#flashContent { width:100%; height:450px; }
+		</style>
+<script>
+document.domain= "yixun.com";
+var yxGame = (function(){
+	var thisMovie = function(movieName) {
+	     if (window.document[movieName]) {
+			return window.document[movieName];
+		}
+		if (document.getElementById(movieName)) {
+			return document.getElementById(movieName);
+		}
+	}
+
+	var addCookie = function(a,b,c,d,e){
+		a=a+"="+escape(b)+"; path="+(c||"/")+(e?"; domain="+e:"");0<d&&(b=new Date,b.setTime(b.getTime()+1E3*d),a+=";expires="+b.toGMTString());document.cookie=a
+	}
+
+	var getCookie = function(a){return(a=document.cookie.match(RegExp("(^| )"+a+"(?:=([^;]*))?(;|$)")))?a[2]?unescape(a[2]):"":""}
+
+	var delCookie = function(a,b){document.cookie=a+"=;path=/;"+(b?"domain="+b+";":"")+"expires="+(new Date(0)).toGMTString()}
+
+	var checkNumber = function(a) {
+		return /^[1-9]\d*$/.test(a);
+	}
+
+	var getLoginUid = function() {
+		var a = getCookie("uid");
+		return checkNumber(a) ? a: !1
+	}
+
+	/**
+	 * 点击抽奖后判断是去抽奖还是先登录
+	 */
+	var checkLogin = function(){
+		var uid = getLoginUid();
+		if(uid){
+	   		thisMovie("game").asGotoLottery(); 
+	  	}else{
+	  		addCookie("yxgame", "lottery", "/", "", ".yixun.com")
+			thisMovie("game").asGotoLogin(); 
+	  	}
+	}
+
+	/**
+	 * 页面初次加载时判断是直接抽奖还是第一次玩游戏
+	 */
+	var showIsLottery = function(){
+		var is_lottery = getCookie("yxgame");
+		if(is_lottery && is_lottery == "lottery"){
+			thisMovie("game").asShowLottery(); 
+			delCookie("yxgame",".yixun.com")
+		}else{
+			thisMovie("game").asStartGame(); 
+		}
+	}
+
+	return {
+		checkLogin:checkLogin,
+		showIsLottery:showIsLottery
+	}
+
+})()
+
+
+
+		</script>
+	</head>
+	<body>
+		<div id="flashContent">
+			
+			<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="100%" height="450" id="game" align="middle">
+				<param name="movie" value="game.swf?213232" />
+				<param name="quality" value="high" />
+				<param name="bgcolor" value="#FFF" />
+				<param name="allowScriptAccess" value="always" />
+				<embed name="game" src="game.swf?213223" bgcolor="#FFFFFF" width="100%" height="450" allowScriptAccess="always" align="middle" type="application/x-shockwave-flash" pluginspage="http://www.adobe.com/go/getflashplayer">
+			</object>
+		</div>
+
+	</body>
+</html>
+
+
